@@ -1,7 +1,7 @@
 ---
-name:Persian Kabob
+name: Persian Kabob
 description: Cubed sirloin marinated overnight in a bold Middle Eastern blend of soy, lemon, cardamom, and cinnamon, then grilled on skewers with peppers, onion, mushrooms, and tomatoes.
-tags: gluten-light
+tags: ['gluten-light']
 time: 90
 ---
 
