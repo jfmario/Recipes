@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Claude Code — local overrides (not shared)
+.claude/settings.local.json
