@@ -25,7 +25,7 @@ The user must provide the following. Ask if they do not.
 - Make the changes necessary to implement the adaptations. 
 - Conduct research if necessary on how the adaptations might require other changes.
 - Consult the `new-recipe` skill for guidance on recipe tone and standards.
-- Write the output file.
+- Write the output file including frontmatter. All tags should be re-evaluated.
 
 ## Tag Definitions
 
