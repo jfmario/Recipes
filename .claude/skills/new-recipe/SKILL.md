@@ -13,6 +13,7 @@ The task is read a recipe, normalize to 8 servings and adjust it according to ou
 The user must provide the following. Ask if they do not.
 
 - Recipe Name
+- Reciept Location: Where to place the recipe within `recipes`.
 - Recipe: The recipe will either be an attached file (such as a PDF) or the URL to a recipe on the web.
 
 The user may provide the following.
@@ -28,7 +29,7 @@ The user may provide the following.
 - Every step must include the specific amounts needed right in the instruction text (e.g., "Add 1 tsp cumin and 1/2 tsp smoked paprika"). The cook should never need to scroll back to the ingredients list while working.
 - Write all fractions using plain text (e.g., 1/2, 3/4, 2/3, 1 1/2). Never use special Unicode fraction characters (½, ¾, ⅔, etc.).
 - Include preparation and "hidden" steps such as pre-heating ovens or dicing onions at the right time. We don't want to need chopped onion and not have it chopped yet, or need to make many spice measurements when time is of the essence. Make no assumptions about an onion being already diced.
-- Write a markdown file based on the template in `references/recipe-template.md`.
+- Write a markdown file based on the template in `references/recipe-template.md` to `recipes/<subdir>/`.
 - Decide on tags to include in the frontmatter. Consider each one below.
 
 ## Tag Definitions
