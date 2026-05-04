@@ -1,13 +1,13 @@
 ---
-name: King Pao Chicken
+name: Kung Pao Chicken
 description: Tender chicken thigh stir-fried with dried chilies, Sichuan pepper, peanuts, and a glossy sweet-sour-savory sauce, scaled for an 8-serving family-style meal.
 tags: ['gluten-light']
 time: 35
 ---
 
-# King Pao Chicken
+# Kung Pao Chicken
 
-This King Pao Chicken is a fast, high-heat stir fry with bold takeout-style flavor: savory soy, bright vinegar, balanced sweetness, and the signature tingle of Sichuan pepper.
+This Kung Pao Chicken is a fast, high-heat stir fry with bold takeout-style flavor: savory soy, bright vinegar, balanced sweetness, and the signature tingle of Sichuan pepper.
 
 For the best texture, have everything measured, chopped, and ready before the wok goes on the heat. At this batch size, cooking in two rounds keeps the chicken seared instead of steamed.
 
