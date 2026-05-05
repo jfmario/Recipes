@@ -31,6 +31,7 @@ The user may provide the following.
 - Include preparation and "hidden" steps such as pre-heating ovens or dicing onions at the right time. We don't want to need chopped onion and not have it chopped yet, or need to make many spice measurements when time is of the essence. Make no assumptions about an onion being already diced.
 - Write a markdown file based on the template in `references/recipe-template.md` to `recipes/<subdir>/`.
 - Decide on tags to include in the frontmatter. Consider each one below.
+- Do not include external hyperlinks. I am maintained credits separately.
 
 ## Tag Definitions
 

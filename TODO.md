@@ -1,5 +1,11 @@
 
-- Cajun Pasta (chicken and shrimp variants)
-- ideas from Panda Express
-- ideas from Olive Garden
-- 
+- Sweet and Sour Chicken
+- Orange Chicken
+- Black Pepper Stirloin
+- Side: Chow Mein
+- Honey Sesame Chicken
+- Chicken/Shrimp Alfredo
+- Steak Gorgonzola Alfredo
+- Chicken/Shrimp Carbonara
+- Spaghetti w Meatballs
+- Enchiladas
