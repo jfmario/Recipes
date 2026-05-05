@@ -24,7 +24,7 @@ The user may provide the following.
 
 - Understand the recipe. 
 - Scale the recipe to 8 servings. Round all measurements to a sane kitchen measurements (ie, 3.1 cloves of garlic becomes 3, and 1.42 cups becomes 1.5 cups). Aromatics should round up, everything else can round to the nearest.
-- The recipe is to be re-written in an authoritative and instructional tone rather than copying original prose.
+- The recipe is to be re-written in an authoritative and instructional tone rather than copying original prose. Don't put a bunch of bold face text.
 - Ingredients should be listed in a single flat list in a logical order, with no subsections or groupings. Water and other universally assumed pantry staples do not need to be listed. Small amounts of non-main ingredients (such as spices, salt, pepper, or a splash of oil) do not need to appear in the ingredients list — they will be introduced inline during the steps when needed.
 - Every step must include the specific amounts needed right in the instruction text (e.g., "Add 1 tsp cumin and 1/2 tsp smoked paprika"). The cook should never need to scroll back to the ingredients list while working.
 - Write all fractions using plain text (e.g., 1/2, 3/4, 2/3, 1 1/2). Never use special Unicode fraction characters (½, ¾, ⅔, etc.).
