@@ -9,3 +9,6 @@
 - Chicken/Shrimp Carbonara
 - Spaghetti w Meatballs
 - Enchiladas
+- Chicken/Noodle Soup
+- Cheese/Broccoli Soup
+- Beef and Lentil Stew
