@@ -1,3 +1,9 @@
+# Local venv for scripts/recipe_to_pdf.py
+.venv-recipe-pdf/
+.venv/
+
+output/*
+
 # macOS
 .DS_Store
 

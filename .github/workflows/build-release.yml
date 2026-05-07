@@ -1,0 +1,129 @@
+name: Build and Release Cookbook
+
+on:
+  workflow_call:
+    inputs:
+      env-key:
+        required: true
+        type: string
+      prerelease:
+        required: true
+        type: boolean
+      include-individual-pdfs:
+        required: false
+        type: boolean
+        default: false
+      release-prefix:
+        required: false
+        type: string
+        default: cookbook
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install system dependencies for WeasyPrint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libcairo2 \
+            libpango-1.0-0 \
+            libpangocairo-1.0-0 \
+            libgdk-pixbuf-2.0-0 \
+            libffi-dev \
+            shared-mime-info
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements-recipe-pdf.txt pypdf
+
+      - name: Build recipe PDFs and combine cookbook
+        run: |
+          python - <<'PY'
+          import pathlib
+          import subprocess
+          import sys
+          from pypdf import PdfWriter
+
+          root = pathlib.Path.cwd()
+          recipes_dir = root / "recipes"
+          output_dir = root / "output"
+          output_dir.mkdir(parents=True, exist_ok=True)
+
+          recipe_files = sorted(recipes_dir.rglob("*.md"), key=lambda p: p.as_posix())
+          if not recipe_files:
+              raise SystemExit("No recipe markdown files were found under recipes/.")
+
+          built_pdfs = []
+          for recipe in recipe_files:
+              relative = recipe.relative_to(recipes_dir)
+              output_pdf = output_dir / relative.with_suffix(".pdf")
+              output_pdf.parent.mkdir(parents=True, exist_ok=True)
+              subprocess.run(
+                  [sys.executable, "scripts/recipe_to_pdf.py", str(recipe), "-o", str(output_pdf)],
+                  check=True,
+              )
+              built_pdfs.append(output_pdf)
+
+          cookbook_pdf = output_dir / "cookbook.pdf"
+          writer = PdfWriter()
+          for pdf in built_pdfs:
+              writer.append(str(pdf))
+          writer.write(str(cookbook_pdf))
+          writer.close()
+
+          print(f"Built {len(built_pdfs)} recipe PDFs")
+          print(f"Cookbook: {cookbook_pdf}")
+          PY
+
+      - name: Prepare release assets
+        run: |
+          python - <<'PY'
+          import pathlib
+          import shutil
+
+          output_dir = pathlib.Path("output")
+          release_dir = pathlib.Path("release-assets")
+          release_dir.mkdir(parents=True, exist_ok=True)
+
+          cookbook = output_dir / "cookbook.pdf"
+          if not cookbook.exists():
+              raise SystemExit("output/cookbook.pdf was not produced.")
+
+          env_key = "${{ inputs.env-key }}".lower()
+          shutil.copy2(cookbook, release_dir / f"cookbook-{env_key}.pdf")
+
+          include_individual = "${{ inputs.include-individual-pdfs }}" == "true"
+          if include_individual:
+              for pdf in sorted(output_dir.rglob("*.pdf")):
+                  if pdf.name == "cookbook.pdf":
+                      continue
+                  rel_name = pdf.relative_to(output_dir).as_posix().replace("/", "-")
+                  shutil.copy2(pdf, release_dir / f"{env_key}-{rel_name}")
+
+          print("Release assets:")
+          for asset in sorted(release_dir.iterdir()):
+              print(asset.as_posix())
+          PY
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.release-prefix }}-${{ inputs.env-key }}-${{ github.sha }}
+          name: Cookbook ${{ inputs.env-key }} build ${{ github.sha }}
+          generate_release_notes: true
+          prerelease: ${{ inputs.prerelease }}
+          files: release-assets/*.pdf

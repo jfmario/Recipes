@@ -1,0 +1,16 @@
+name: DEV Build
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-release.yml
+    with:
+      env-key: DEV
+      prerelease: true
+      include-individual-pdfs: true
+      release-prefix: cookbook
