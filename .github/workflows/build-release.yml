@@ -48,26 +48,24 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r scripts/requirements-recipe-pdf.txt pypdf
+          pip install -r scripts/requirements-recipe-pdf.txt
 
-      - name: Build recipe PDFs and combine cookbook
+      - name: Build cookbook PDF
+        run: python scripts/cookbook_to_pdf.py -o output/cookbook.pdf
+
+      - name: Build individual recipe PDFs (optional)
+        if: ${{ inputs.include-individual-pdfs }}
         run: |
           python - <<'PY'
           import pathlib
           import subprocess
           import sys
-          from pypdf import PdfWriter
 
           root = pathlib.Path.cwd()
           recipes_dir = root / "recipes"
           output_dir = root / "output"
-          output_dir.mkdir(parents=True, exist_ok=True)
 
           recipe_files = sorted(recipes_dir.rglob("*.md"), key=lambda p: p.as_posix())
-          if not recipe_files:
-              raise SystemExit("No recipe markdown files were found under recipes/.")
-
-          built_pdfs = []
           for recipe in recipe_files:
               relative = recipe.relative_to(recipes_dir)
               output_pdf = output_dir / relative.with_suffix(".pdf")
@@ -76,17 +74,7 @@ jobs:
                   [sys.executable, "scripts/recipe_to_pdf.py", str(recipe), "-o", str(output_pdf)],
                   check=True,
               )
-              built_pdfs.append(output_pdf)
-
-          cookbook_pdf = output_dir / "cookbook.pdf"
-          writer = PdfWriter()
-          for pdf in built_pdfs:
-              writer.append(str(pdf))
-          writer.write(str(cookbook_pdf))
-          writer.close()
-
-          print(f"Built {len(built_pdfs)} recipe PDFs")
-          print(f"Cookbook: {cookbook_pdf}")
+          print(f"Built {len(recipe_files)} individual recipe PDFs")
           PY
 
       - name: Prepare release assets

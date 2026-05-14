@@ -49,6 +49,15 @@ strong { font-weight: 600; }
 """
 
 
+def _escape(s: str) -> str:
+    return (
+        s.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace('"', "&quot;")
+    )
+
+
 def split_frontmatter(text: str) -> tuple[dict, str]:
     m = FRONTMATTER_RE.match(text)
     if not m:
@@ -64,7 +73,19 @@ def split_frontmatter(text: str) -> tuple[dict, str]:
     return data, body
 
 
-def build_html(title: str, meta: dict, body_html: str) -> str:
+def strip_leading_duplicate_h1(body: str, title: str) -> str:
+    """Remove a leading # heading when it duplicates the recipe title (matches frontmatter name)."""
+    body_stripped = body.lstrip()
+    if body_stripped.startswith("# "):
+        first_line = body_stripped.split("\n", 1)[0]
+        h1_text = first_line[2:].strip()
+        if h1_text.casefold() == title.casefold():
+            body = body_stripped.split("\n", 1)[1] if "\n" in body_stripped else ""
+    return body
+
+
+def recipe_fragment_html(title: str, meta: dict, body_html: str) -> str:
+    """HTML fragment for one recipe: title, optional description, meta row, body (no wrapper)."""
     parts = []
     if meta.get("description"):
         desc_md = markdown.markdown(str(meta["description"]), extensions=EXTENSIONS)
@@ -81,6 +102,14 @@ def build_html(title: str, meta: dict, body_html: str) -> str:
         spans.append(f"<span><strong>Tags</strong>: {tag_str}</span>")
     meta_html = f'<div class="meta">{"".join(spans)}</div>' if spans else ""
     desc_html = parts[0] if parts else ""
+    return f"""<h1>{_escape(title)}</h1>
+{desc_html}
+{meta_html}
+{body_html}"""
+
+
+def build_html(title: str, meta: dict, body_html: str) -> str:
+    inner = recipe_fragment_html(title, meta, body_html)
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,21 +118,9 @@ def build_html(title: str, meta: dict, body_html: str) -> str:
 <style>{CSS}</style>
 </head>
 <body>
-<h1>{_escape(title)}</h1>
-{desc_html}
-{meta_html}
-{body_html}
+{inner}
 </body>
 </html>"""
-
-
-def _escape(s: str) -> str:
-    return (
-        s.replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
-        .replace('"', "&quot;")
-    )
 
 
 def title_from(meta: dict, body: str, path: Path) -> str:
@@ -134,14 +151,7 @@ def main() -> None:
     text = src.read_text(encoding="utf-8")
     meta, body = split_frontmatter(text)
     title = title_from(meta, body, src)
-
-    # Body: skip leading duplicate H1 if it matches title (common in recipes)
-    body_stripped = body.lstrip()
-    if body_stripped.startswith("# "):
-        first_line = body_stripped.split("\n", 1)[0]
-        h1_text = first_line[2:].strip()
-        if h1_text.casefold() == title.casefold():
-            body = body_stripped.split("\n", 1)[1] if "\n" in body_stripped else ""
+    body = strip_leading_duplicate_h1(body, title)
 
     body_html = markdown.markdown(body, extensions=EXTENSIONS)
     html_doc = build_html(title, meta, body_html)
