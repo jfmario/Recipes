@@ -12,3 +12,4 @@
 - Chicken/Noodle Soup
 - Cheese/Broccoli Soup
 - Beef and Lentil Stew
+- Omelette Bar
