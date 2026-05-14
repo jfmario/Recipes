@@ -2,14 +2,16 @@
 """
 Build one cookbook PDF from every recipe under recipes/.
 
-Includes a numbered table of contents with page numbers (single WeasyPrint pass),
-part headings by top-level folder (main, side, lenten, …), and each recipe in
-its own section with page breaks as needed.
+Includes a numbered table of contents (grouped by the same parts as the recipes)
+with page numbers (single WeasyPrint pass), part headings by top-level folder,
+and each recipe in its own section with page breaks as needed.
 """
 
 from __future__ import annotations
 
 import argparse
+import platform
+import subprocess
 import sys
 from pathlib import Path
 
@@ -31,7 +33,16 @@ COOKBOOK_EXTRA_CSS = """
   border-bottom: none;
   padding-bottom: 0;
 }
-.toc-block ol { margin: 0.35em 0 0 1.75em; padding: 0; }
+.toc-block h3.toc-section-title {
+  font-size: 1.12rem;
+  margin: 1.1em 0 0.35em;
+  padding-bottom: 0.15em;
+  border-bottom: 1px solid #bbb;
+  font-weight: 600;
+  color: #333;
+}
+.toc-block h2 + h3.toc-section-title { margin-top: 0.65em; }
+.toc-block ol { margin: 0.35em 0 0.75em 1.75em; padding: 0; }
 .toc-block li { margin: 0.4em 0; }
 .toc-block a {
   color: #222;
@@ -104,19 +115,27 @@ def _build_cookbook_html(recipes_dir: Path) -> str:
         toc_items.append((anchor, title))
         recipe_sections.append(f'<section class="recipe" id="{anchor}">{inner}</section>')
 
+    grouped = _group_by_top_folder(recipe_files, recipes_dir)
+
     toc_lines = [
         '<div class="toc-block">',
         "<h1>Cookbook</h1>",
         "<h2>Table of Contents</h2>",
-        "<ol>",
     ]
-    for anchor, title in toc_items:
+    pos = 0
+    for folder, paths in grouped:
         toc_lines.append(
-            f'<li><a href="#{anchor}"><span class="toc-name">{rtp._escape(title)}</span></a></li>'
+            f'<h3 class="toc-section-title">{rtp._escape(_part_label(folder))}</h3>'
         )
-    toc_lines.extend(["</ol>", "</div>"])
-
-    grouped = _group_by_top_folder(recipe_files, recipes_dir)
+        toc_lines.append(f'<ol start="{pos + 1}">')
+        for _ in paths:
+            anchor, title = toc_items[pos]
+            toc_lines.append(
+                f'<li><a href="#{anchor}"><span class="toc-name">{rtp._escape(title)}</span></a></li>'
+            )
+            pos += 1
+        toc_lines.append("</ol>")
+    toc_lines.append("</div>")
     idx = 0
     part_chunks: list[str] = []
     for folder, paths in grouped:
@@ -157,6 +176,11 @@ def main() -> None:
         default=Path("recipes"),
         help="Root directory of recipe markdown files",
     )
+    ap.add_argument(
+        "--open",
+        action="store_true",
+        help="After a successful build, open the PDF (macOS only: uses the open command)",
+    )
     args = ap.parse_args()
     root = Path.cwd()
     recipes_dir = (root / args.recipes_dir).resolve()
@@ -169,6 +193,8 @@ def main() -> None:
     html_doc = _build_cookbook_html(recipes_dir)
     HTML(string=html_doc, base_url=str(recipes_dir)).write_pdf(out)
     print(out)
+    if args.open and platform.system() == "Darwin":
+        subprocess.run(["open", str(out)], check=False)
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
-# Local venv for scripts/recipe_to_pdf.py
-.venv-recipe-pdf/
+# Python virtual environment (use one project venv; activate before pip/scripts)
 .venv/
+venv/
 
 output/*
 
