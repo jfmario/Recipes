@@ -81,6 +81,7 @@ def _part_label(folder: str) -> str:
         "side": "Sides",
         "lenten": "Lenten",
         "ingredients": "Ingredients & bases",
+        "quick-solo-meals": "Quick solo meals",
     }.get(folder, folder.replace("-", " ").title())
 
 
