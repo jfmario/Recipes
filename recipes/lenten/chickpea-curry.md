@@ -15,9 +15,16 @@ If you are serving rice or another starch, start it before the curry so both fin
 
 * 4 tbsp coconut oil
 * 2 medium red or yellow onions
+* 6 garlic cloves
 * Two (14 to 15 oz / 400 g) cans diced tomatoes, with juices (or about 28 oz / 800 g fresh tomatoes, diced)
 * Two (15 to 16 oz / 425 to 454 g) cans chickpeas
+* 3 tbsp garam masala
+* 2 tsp curry powder
+* 1/2 tsp ground cumin
+* 1 tsp salt (plus more to taste)
+* 1/2 tsp black pepper (plus more to taste)
 * Two (13.5 fl oz / 400 ml) cans full-fat coconut milk
+* 4 tsp coconut flour (optional, for thicker sauce)
 * 2 small limes
 
 ## Steps
