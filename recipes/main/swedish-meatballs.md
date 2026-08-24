@@ -17,6 +17,11 @@ Use full-fat sour cream and temper it with warm sauce before adding it to the pa
 * 3 garlic cloves, minced
 * 3/4 cup panko breadcrumbs
 * 3/8 cup Parmesan cheese, finely grated
+* 1 1/2 tsp kosher salt
+* 1/2 tsp dried oregano
+* 1/2 tsp ground allspice
+* 1/2 tsp ground nutmeg
+* 1/2 tsp black pepper
 * 1 1/2 lb ground beef
 * 1 lb ground pork
 * 6 tbsp olive oil, divided
@@ -26,6 +31,7 @@ Use full-fat sour cream and temper it with warm sauce before adding it to the pa
 * 1 1/2 cubes chicken bouillon
 * 3 tsp Worcestershire sauce
 * 1 1/2 tsp Dijon mustard
+* 1 1/2 tsp dried parsley
 * 3/4 cup sour cream, room temperature
 * Fresh parsley, chopped, for garnish (optional)
 * Mashed potatoes or egg noodles, for serving
